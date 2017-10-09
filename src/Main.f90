@@ -1,13 +1,4 @@
-! https://github.com/MichaelSiehl/Atomic_Subroutines--Part_3-a--How_To_Process_Array_Data
-
-!program Main
-!  !
-!  use Main_Sub
-!  !
-!  call Entry_Main_Sub ()
-!  !
-!end program Main
-
+! https://github.com/MichaelSiehl/Atomic_Subroutines--Part_3a--How_To_Process_Array_Data
 
 program Main
   use OOOGglob_Globals
