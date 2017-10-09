@@ -107,3 +107,29 @@ subroutine OOOPimscSAElement_atomic_intTestArray_CA (Object_CA, intArrayElementS
     call atomic_define(Object_CA [intImageNumber] % mA_atomic_intTestArray(this_image(),intArrayIndex), intArrayElementSyncStat)
 .
 ```
+<br />
+3. The procedure interface of the OOOPimscGAElement_check_atomic_intTestArray_CA accessor and it's call to atomic_ref require only a minor extension to allow for access to any of the distinct remote communication channels for the array data:<br />
+
+```fortran
+logical(OOOGglob_klog) function OOOPimscGAElement_check_atomic_intTestArray_CA (Object_CA, intCheckArrayElementSyncStat, &
+                                        intArrayIndex, intRemoteImageNumber, intAdditionalAtomicValue, logExecuteSyncMemory)
+.
+integer(OOOGglob_kint), intent (in) :: intRemoteImageNumber
+.
+.
+  call atomic_ref(intArrayElementSyncStat, Object_CA % mA_atomic_intTestArray(intRemoteImageNumber, intArrayIndex))
+.
+```
+<br />
+4. And finally, the customized synchronization procedure for the array data OOOPimscSpinWaitArrayRang1Sync_atomic_intTestArray_CA requires only a small adaption for it's call to the above accessor. The procedure interface of the synchronization routine remains unchanged:<br />
+
+```fortran
+subroutine OOOPimscSpinWaitArrayRang1Sync_atomic_intTestArray_CA (Object_CA, intCheckArrayElementSyncStat, &
+                  intRemoteImageNumber, intArrayUpperBound, intA_ArrayElementSyncStatAndItsAdditionalAtomicValue, &
+                  logExecuteSyncMemory)
+.
+.
+          if (OOOPimscGAElement_check_atomic_intTestArray_CA (OOOPimscImageStatus_CA_1, &
+                           intCheckArrayElementSyncStat, intArrayIndex, intRemoteImageNumber, &
+                           intAdditionalAtomicValue = intAtomicValue, logExecuteSyncMemory = .false.))
+```
