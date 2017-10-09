@@ -1,4 +1,4 @@
-! https://github.com/MichaelSiehl/Atomic_Subroutines--Part_3-a--How_To_Process_Array_Data
+! https://github.com/MichaelSiehl/Atomic_Subroutines--Part_3a--How_To_Process_Array_Data
 
 module OOOPimsc_admImageStatus_CA
 !************************************************
