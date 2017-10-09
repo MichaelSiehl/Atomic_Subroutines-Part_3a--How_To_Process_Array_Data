@@ -94,5 +94,16 @@ type, public :: OOOPimsc_adtImageStatus_CA
 .
 end type OOOPimsc_adtImageStatus_CA
 ```
-This newly added dimension (1:OOOGglob_NumImages_UpperBound) gives not only additional PGAS memory to hold the values from all the remote images (on image 1) but also additional distinct remote communication channels for safe transfer of the array data from the different coarray images (2,3,4) through atomic_define.<br />
+This newly added dimension (1:OOOGglob_NumImages_UpperBound) gives not only additional PGAS memory to hold the values from all the remote images (on image 1) but also additional distinct remote communication channels for safe transfer of the array data from the distinct coarray images (2,3,4) through atomic_define.<br />
 <br />
+2. The OOOPimscSAElement_atomic_intTestArray_CA access routine for the derived type coarray array component then uses 'this_image()' to access it's own unique remote communication channel with atomic_define:
+```fortran
+subroutine OOOPimscSAElement_atomic_intTestArray_CA (Object_CA, intArrayElementSyncStat, &
+                                intImageNumber, intArrayIndex, logExecuteSyncMemory)
+.
+.
+    call atomic_define(Object_CA % mA_atomic_intTestArray(this_image(),intArrayIndex), intArrayElementSyncStat)
+.
+    call atomic_define(Object_CA [intImageNumber] % mA_atomic_intTestArray(this_image(),intArrayIndex), intArrayElementSyncStat)
+.
+```
