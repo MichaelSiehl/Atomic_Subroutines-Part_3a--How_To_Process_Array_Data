@@ -82,3 +82,17 @@ program Main
   !
 end program Main
 ```
+
+# - Code changes in the OOOPimsc_admImageStatus_CA module
+Only minor changes where required to allow for safe reverse remote transfer from several coarray images (2,3,4) to the same single remote image (1) (in the source code these changes are marked with date stamp '171006'):<br />
+<br />
+1. To allow for safe remote array data transfer from multiple coarray images (2,3,4) to the same single remote coarray image (1), we do extend the array member (of the derived type coarray definition) by an additional (first) dimension:
+```fortran
+type, public :: OOOPimsc_adtImageStatus_CA
+.
+  integer(atomic_int_kind), dimension (1:OOOGglob_NumImages_UpperBound, 1:5) :: mA_atomic_intTestArray
+.
+end type OOOPimsc_adtImageStatus_CA
+```
+This newly added dimension (1:OOOGglob_NumImages_UpperBound) gives not only additional PGAS memory to hold the values from all the remote images (on image 1) but also additional distinct remote communication channels for safe transfer of the array data from the different coarray images (2,3,4) through atomic_define.<br />
+<br />
