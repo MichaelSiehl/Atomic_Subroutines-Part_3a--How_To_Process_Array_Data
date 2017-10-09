@@ -46,11 +46,11 @@ program Main
     intA_TestArrayForRemoteTransfer = (/1,2,3,4,5/)
     !
     ! This routine call is to synchronize and distribute the TestArray (using atomic subroutines)
-    ! to the involved remote images (2,3,4):
+    ! to the involved remote images (2,3,4) (first phase):
     call OOOPimsc_SynchronizeAndDistributeTheTestArray_CA (OOOPimscImageStatus_CA_1, &
             intNumberOfRemoteImages, intA_RemoteImageNumbers, intA_TestArrayForRemoteTransfer)
     !
-    ! initiate and wait for reverse remote transfer:
+    ! initiate and wait for reverse remote transfer (second phase):
     do intCount = 1, intNumberOfRemoteImages
       intSetFromImageNumber = intA_RemoteImageNumbers(intCount)
       call OOOPimsc_InitiateAndWaitForTestArrayTransfer_CA (OOOPimscImageStatus_CA_1, intSetFromImageNumber, &
@@ -64,12 +64,12 @@ program Main
     intSetFromImageNumber = 1
     !
     ! This routine call is to synchronize and receive the TestArray (using atomic subroutines)
-    ! on the involved images (2,3,4):
+    ! on the involved images (2,3,4) (first phase):
     call OOOPimsc_InitiateAndWaitForTestArrayTransfer_CA (OOOPimscImageStatus_CA_1, intSetFromImageNumber, &
                                                              intA_TestArrayForRemoteTransfer)
     write(*,*) 'first phase: remote array transfer done: on image / array data', this_image(), intA_TestArrayForRemoteTransfer
     !
-    ! synchronize and distribute the reverse remote transfer:
+    ! synchronize and distribute the reverse remote transfer (second phase):
     intNumberOfRemoteImages = 1
     intA_RemoteImageNumbers(1) = 1
     intA = this_image()
